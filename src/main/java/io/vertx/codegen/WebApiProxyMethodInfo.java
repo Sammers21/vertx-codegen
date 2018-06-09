@@ -8,18 +8,21 @@ import io.vertx.codegen.type.TypeInfo;
 import java.util.List;
 import java.util.Set;
 
-public class OpenApiProxyMethodInfo extends ProxyMethodInfo {
+/**
+ * @author <a href="https://github.com/slinkydeveloper">Francesco Guardiani</a>
+ */
+public class WebApiProxyMethodInfo extends ProxyMethodInfo {
 
   final List<ParamInfo> paramsToExtract;
   final String requestContextName;
 
-  public OpenApiProxyMethodInfo(Set<ClassTypeInfo> ownerTypes, String name, MethodKind kind, TypeInfo returnType, Text returnDescription, boolean fluent, boolean cacheReturn, List<ParamInfo> params, String comment, Doc doc, boolean staticMethod, boolean defaultMethod, List<TypeParamInfo.Method> typeParams, boolean proxyIgnore, boolean proxyClose, boolean deprecated) {
+  public WebApiProxyMethodInfo(Set<ClassTypeInfo> ownerTypes, String name, MethodKind kind, TypeInfo returnType, Text returnDescription, boolean fluent, boolean cacheReturn, List<ParamInfo> params, String comment, Doc doc, boolean staticMethod, boolean defaultMethod, List<TypeParamInfo.Method> typeParams, boolean proxyIgnore, boolean proxyClose, boolean deprecated) {
     super(ownerTypes, name, kind, returnType, returnDescription, fluent, cacheReturn, params, comment, doc, staticMethod, defaultMethod, typeParams, proxyIgnore, proxyClose, deprecated);
     paramsToExtract = params.subList(0, params.size() - 2);
     requestContextName = params.get(params.size() - 2).name;
   }
 
-  public OpenApiProxyMethodInfo(ProxyMethodInfo info) {
+  public WebApiProxyMethodInfo(ProxyMethodInfo info) {
     this(
       info.ownerTypes,
       info.name,

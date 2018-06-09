@@ -18,10 +18,7 @@ package io.vertx.test.codegen;
 
 import io.vertx.codegen.*;
 import io.vertx.codegen.Compiler;
-import io.vertx.codegen.annotations.ModuleGen;
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.annotations.ProxyGen;
-import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.codegen.annotations.*;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -84,6 +81,10 @@ public class GeneratorHelper {
     return generateClass(codegen -> codegen.getProxyModel(c.getCanonicalName()), c, rest);
   }
 
+  public WebApiProxyModel generateWebApiProxyModel(Class c, Class... rest) throws Exception {
+    return generateClass(codegen -> codegen.getWebApiProxyModel(c.getCanonicalName()), c, rest);
+  }
+
   public EnumModel generateEnum(Class c, Class... rest) throws Exception {
     return generateClass(codegen -> codegen.getEnumModel(c.getCanonicalName()), c, rest);
   }
@@ -113,6 +114,7 @@ public class GeneratorHelper {
     public Set<String> getSupportedAnnotationTypes() {
       HashSet<String> set = new HashSet<>();
       set.add(ProxyGen.class.getCanonicalName());
+      set.add(WebApiProxyGen.class.getCanonicalName());
       set.add(VertxGen.class.getCanonicalName());
       set.add(DataObject.class.getCanonicalName());
       set.add(ModuleGen.class.getCanonicalName());

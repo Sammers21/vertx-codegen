@@ -68,7 +68,7 @@ public class MvelCodeGeneratorLoader implements GeneratorLoader {
                 case "proxy":
                   return ProxyModel.class;
                 case "openapi_proxy":
-                  return OpenApiProxyModel.class;
+                  return WebApiProxyModel.class;
                 case "enum":
                   return EnumModel.class;
                 case "module":

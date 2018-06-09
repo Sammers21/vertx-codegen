@@ -94,6 +94,7 @@
               <configuration>
                 <excludes>
                   <exclude>io/vertx/core/**</exclude>
+                  <exclude>io/vertx/ext/**</exclude>
                   <exclude>io/vertx/codegen/testmodel/**</exclude>
                   <exclude>com/acme/**</exclude>
                 </excludes>

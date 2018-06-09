@@ -53,7 +53,7 @@ public class CodeGenProcessor extends AbstractProcessor {
     return Arrays.asList(
         VertxGen.class,
         ProxyGen.class,
-        OpenApiProxyGen.class,
+        WebApiProxyGen.class,
         DataObject.class,
         DataObject.class,
         ModuleGen.class
