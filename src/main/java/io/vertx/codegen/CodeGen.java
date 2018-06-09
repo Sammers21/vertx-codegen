@@ -1,9 +1,6 @@
 package io.vertx.codegen;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.annotations.ModuleGen;
-import io.vertx.codegen.annotations.ProxyGen;
-import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.codegen.annotations.*;
 import io.vertx.codegen.overloadcheck.MethodOverloadChecker;
 import io.vertx.codegen.type.AnnotationValueInfo;
 import io.vertx.codegen.type.AnnotationValueInfoFactory;
@@ -41,6 +38,7 @@ public class CodeGen {
   private final HashMap<String, TypeElement> enums = new HashMap<>();
   private final HashMap<String, PackageElement> modules = new HashMap<>();
   private final HashMap<String, TypeElement> proxyClasses = new HashMap<>();
+  private final HashMap<String, TypeElement> openapiProxyClasses = new HashMap<>();
   private final ProcessingEnvironment env;
   private final Elements elementUtils;
   private final Types typeUtils;
@@ -84,6 +82,10 @@ public class CodeGen {
       stream().
       filter(implFilter).
       forEach(element -> proxyClasses.put(Helper.getNonGenericType(element.asType().toString()), (TypeElement) element));
+    round.getElementsAnnotatedWith(OpenApiProxyGen.class).
+      stream().
+      filter(implFilter).
+      forEach(element -> openapiProxyClasses.put(Helper.getNonGenericType(element.asType().toString()), (TypeElement) element));
   }
 
   public Stream<Map.Entry<? extends Element, ? extends Model>> getModels() {
@@ -92,7 +94,8 @@ public class CodeGen {
             Stream.concat(getPackageModels(),
                 Stream.concat(getClassModels(),
                     Stream.concat(getEnumModels(),
-                        getProxyModels())))));
+                        Stream.concat(getProxyModels(),
+                                      getOpenApiProxyModels()))))));
   }
 
   public Stream<Map.Entry<TypeElement, ClassModel>> getClassModels() {
@@ -120,6 +123,10 @@ public class CodeGen {
 
   public Stream<Map.Entry<TypeElement, ProxyModel>> getProxyModels() {
     return proxyClasses.entrySet().stream().map(entry -> new ModelEntry<>(entry.getValue(), () -> getProxyModel(entry.getKey())));
+  }
+
+  public Stream<Map.Entry<TypeElement, ProxyModel>> getOpenApiProxyModels() {
+    return openapiProxyClasses.entrySet().stream().map(entry -> new ModelEntry<>(entry.getValue(), () -> getOpenApiProxyModel(entry.getKey())));
   }
 
   public Stream<Map.Entry<TypeElement, EnumModel>> getEnumModels() {
@@ -198,6 +205,17 @@ public class CodeGen {
       throw new IllegalArgumentException("Source for " + fqcn + " not found");
     } else {
       ProxyModel model = new ProxyModel(env, methodOverloadChecker, messager, classes, elementUtils, typeUtils, element);
+      model.process();
+      return model;
+    }
+  }
+
+  public ProxyModel getOpenApiProxyModel(String fqcn) {
+    TypeElement element = openapiProxyClasses.get(fqcn);
+    if (element == null) {
+      throw new IllegalArgumentException("Source for " + fqcn + " not found");
+    } else {
+      OpenApiProxyModel model = new OpenApiProxyModel(env, methodOverloadChecker, messager, classes, elementUtils, typeUtils, element);
       model.process();
       return model;
     }

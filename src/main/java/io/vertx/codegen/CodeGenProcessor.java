@@ -1,9 +1,6 @@
 package io.vertx.codegen;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.annotations.ModuleGen;
-import io.vertx.codegen.annotations.ProxyGen;
-import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.codegen.annotations.*;
 import io.vertx.codegen.generators.cheatsheet.CheatsheetGenLoader;
 import io.vertx.codegen.generators.dataobjecthelper.DataObjectHelperGenLoader;
 import io.vertx.codegen.generators.mvel.MvelCodeGeneratorLoader;
@@ -56,6 +53,7 @@ public class CodeGenProcessor extends AbstractProcessor {
     return Arrays.asList(
         VertxGen.class,
         ProxyGen.class,
+        OpenApiProxyGen.class,
         DataObject.class,
         DataObject.class,
         ModuleGen.class
